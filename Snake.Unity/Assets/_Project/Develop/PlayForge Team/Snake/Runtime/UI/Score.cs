@@ -3,9 +3,11 @@ using TMPro;
 
 namespace PlayForge_Team.Snake.Runtime.UI
 {
+    [RequireComponent(typeof(Animation))]
     public sealed class Score : MonoBehaviour
     {
         private const string BestScoreKey = "BestScore";
+        private Animation _scoreIncreaseAnimation;
         private TMP_Text _scoreText;
         private int _score;
         private int _bestScore;
@@ -20,11 +22,13 @@ namespace PlayForge_Team.Snake.Runtime.UI
         private void FillComponents()
         {
             _scoreText = GetComponentInChildren<TMP_Text>();
+            _scoreIncreaseAnimation = GetComponent<Animation>();
         }
         
         public void AddScore(int value)
         {
             SetScore(_score + value);
+            PlayScoreIncreaseAnimation();
         }
 
         public void Restart()
@@ -52,6 +56,11 @@ namespace PlayForge_Team.Snake.Runtime.UI
         {
             _score = value;
             SetScoreText(value);
+        }
+        
+        private void PlayScoreIncreaseAnimation()
+        {
+            _scoreIncreaseAnimation.Play(PlayMode.StopAll);
         }
 
         private void SetScoreText(int value)
