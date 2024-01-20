@@ -1,54 +1,90 @@
-﻿using System;
+﻿using PlayForge_Team.Snake.Runtime.Apples;
 using UnityEngine;
+using System;
 
 namespace PlayForge_Team.Snake.Runtime.Snakes
 {
     public sealed class Snake : MonoBehaviour
     {
+        [SerializeField] private AppleSpawner appleSpawner;
+        [SerializeField] private GameStateChanger gameStateChanger;
         [SerializeField] private GameField gameField;
-        [SerializeField] private SnakePart headPrefab;
-        [SerializeField] private SnakePart bodyPrefab;
+        [SerializeField] private GameFieldObject headPrefab;
+        [SerializeField] private GameFieldObject bodyPrefab;
         [SerializeField] private Vector2Int startCellId = new(5, 5);
         [SerializeField] private float moveDelay = 1.3f;
-        private SnakePart[] _parts;
+        private GameFieldObject[] _parts;
         private Vector2Int _moveDirection = Vector2Int.up;
         private float _moveTimer;
+        private bool _isActive;
         
         private void Update()
         {
+            if (!_isActive)
+            {
+                return;
+            }
             GetMoveDirection();
             MoveTimerTick();
         }
         
-        public void CreateSnake()
+        public void StartGame()
         {
-            _parts = Array.Empty<SnakePart>();
+            CreateSnake();
+            _isActive = true;
+        }
+
+        public void StopGame()
+        {
+            _isActive = false;
+        }
+        
+        public int GetSnakePartsLength()
+        {
+            return _parts.Length;
+        }
+
+        private void CreateSnake()
+        {
+            _parts = Array.Empty<GameFieldObject>();
             AddPart(headPrefab, startCellId);
             AddPart(bodyPrefab, startCellId + Vector2Int.down);
         }
+
+        private void CheckNextCellFail(Vector2Int nextCellId)
+        {
+            for (var i = 1; i < _parts.Length; i++)
+            {
+                if (_parts[i].GetCellId() == nextCellId)
+                {
+                    gameStateChanger.EndGame();
+                }
+            }
+        }
+
+        private void CheckNextCellApple(Vector2Int nextCellId, Vector2Int cellIdForAddPart)
+        {
+            if (appleSpawner.GetAppleCellId() != nextCellId) return;
+            AddPart(bodyPrefab, cellIdForAddPart);
+            appleSpawner.SetNextApple();
+        }
         
-        private void AddPart(SnakePart partPrefab, Vector2Int cellId)
+        private void AddPart(GameFieldObject partPrefab, Vector2Int cellId)
         {
             IncreasePartsArrayLength();
             var newSnakePart = Instantiate(partPrefab);
             _parts[^1] = newSnakePart;
-            SetPartCell(newSnakePart, cellId);
+            gameField.SetObjectCell(newSnakePart, cellId);
         }
         
         private void IncreasePartsArrayLength()
         {
             var tempParts = _parts;
-            _parts = new SnakePart[tempParts.Length + 1];
+            _parts = new GameFieldObject[tempParts.Length + 1];
             for (var i = 0; i < tempParts.Length; i++)
             {
                 _parts[i] = tempParts[i];
             } 
-        }
-        
-        private void SetPartCell(SnakePart part, Vector2Int cellId)
-        {
-            var cellPosition = gameField.GetCellPosition(cellId.x, cellId.y);
-            part.SetCellPosition(cellId, cellPosition);
         }
         
         private void GetMoveDirection()
@@ -90,12 +126,17 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
         private void Move()
         {
             _moveTimer = 0;
+            var lastPartCellId = _parts[^1].GetCellId();
+            var headNewCell = MoveCellId(_parts[0].GetCellId(), _moveDirection);
+            gameField.SetCellIsEmpty(lastPartCellId.x, lastPartCellId.y, true);
+
             for (var i = _parts.Length - 1; i >= 0; i--)
             {
-                var partCellId = _parts[i].GetCellId();
-                partCellId = i == 0 ? MoveCellId(partCellId, _moveDirection) : _parts[i - 1].GetCellId();
-                SetPartCell(_parts[i], partCellId);
+                var partCellId = i == 0 ? headNewCell : _parts[i - 1].GetCellId();
+                gameField.SetObjectCell(_parts[i], partCellId);
             }
+            CheckNextCellFail(headNewCell);
+            CheckNextCellApple(headNewCell, lastPartCellId);
         }
         
         private Vector2Int MoveCellId(Vector2Int cellId, Vector2Int direction)

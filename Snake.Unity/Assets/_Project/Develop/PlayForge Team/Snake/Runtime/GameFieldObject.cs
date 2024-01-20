@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace PlayForge_Team.Snake.Runtime.Snakes
+namespace PlayForge_Team.Snake.Runtime
 {
-    public sealed class SnakePart : MonoBehaviour
+    public sealed class GameFieldObject : MonoBehaviour
     {
         private Vector2Int _cellId;
 
