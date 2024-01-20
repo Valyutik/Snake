@@ -7,7 +7,8 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
 {
     public sealed class Snake : MonoBehaviour
     {
-        [SerializeField] private AppleSpawner BonusAppleSpawner;
+        [SerializeField] private float ExplosionForce = 60;
+        [SerializeField] private AppleSpawner bonusAppleSpawner;
         [SerializeField] private Score score;
         [SerializeField] private AppleSpawner appleSpawner;
         [SerializeField] private GameStateChanger gameStateChanger;
@@ -60,6 +61,18 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
                 Destroy(t.gameObject);
             }
         }
+        
+        private void ExplodeSnake(Vector2 explodePosition)
+        {
+            foreach (var t in _parts)
+            {
+                var partRigid = t.GetComponent<Rigidbody2D>();
+                partRigid.simulated = true;
+                var partPosition = gameField.GetCellPosition(t.GetCellId());
+                var explodeDirection = partPosition - explodePosition;
+                partRigid.AddForce((explodeDirection.normalized + Vector2.up) * ExplosionForce, ForceMode2D.Impulse);
+            }
+        }
 
         private void CreateSnake()
         {
@@ -72,12 +85,13 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
         {
             for (var i = 1; i < _parts.Length; i++)
             {
-                if (_parts[i].GetCellId() == nextCellId)
-                {
-                    gameStateChanger.EndGame();
-                }
+                if (_parts[i].GetCellId() != nextCellId) continue;
+                gameStateChanger.EndGame();
+                var partPosition = gameField.GetCellPosition(_parts[i].GetCellId());
+                ExplodeSnake(partPosition);
             }
         }
+
 
         private void CheckNextCellApple(Vector2Int nextCellId, Vector2Int cellIdForAddPart)
         {
@@ -85,18 +99,18 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
             {
                 AddPart(bodyPrefab, cellIdForAddPart);
                 appleSpawner.SetNextApple();
-                BonusAppleSpawner.SetNextApple();
+                bonusAppleSpawner.SetNextApple();
 
                 score.AddScore(1);
             }
-            else if(BonusAppleSpawner.GetAppleCellId() == nextCellId)
+            else if(bonusAppleSpawner.GetAppleCellId() == nextCellId)
             {
                 const int countToRemove = 2;
                 for (var i = 0; i < countToRemove; i++)
                 {
                     RemovePart();
                 }
-                BonusAppleSpawner.HideApple();
+                bonusAppleSpawner.HideApple();
             }
         }
         

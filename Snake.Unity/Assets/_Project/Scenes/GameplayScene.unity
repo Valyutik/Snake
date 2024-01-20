@@ -198,7 +198,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 862108c06b6c4908acc567ba353feeb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BonusAppleSpawner: {fileID: 1969811234}
+  ExplosionForce: 60
+  bonusAppleSpawner: {fileID: 1969811234}
   score: {fileID: 520308274}
   appleSpawner: {fileID: 316316822}
   gameStateChanger: {fileID: 495057519}

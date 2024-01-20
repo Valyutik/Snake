@@ -26,6 +26,11 @@ namespace PlayForge_Team.Snake.Runtime
                 }
             }
         }
+        
+        public Vector2 GetCellPosition(Vector2Int cellId)
+        {
+            return GetCellPosition(cellId.x, cellId.y);
+        }
 
         private Vector2 GetCellPosition(int x, int y)
         {
