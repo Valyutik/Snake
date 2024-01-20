@@ -10,11 +10,14 @@ namespace PlayForge_Team.Snake.Runtime.Apples
         [SerializeField] private Snakes.Snake snake;
         [SerializeField] private GameFieldObject applePrefab;
         private GameFieldObject _apple;
+        private Animation _appleAnimation;
         private int _stepCounter = -1;
         
         public void CreateApple()
         {
             _apple = Instantiate(applePrefab);
+
+            _appleAnimation = _apple.GetComponent<Animation>();
             SetNextApple();
         }
         
@@ -44,6 +47,7 @@ namespace PlayForge_Team.Snake.Runtime.Apples
                 return;
             }
             ShowApple();
+            PlayAppleAnimation();
 
             var emptyCellsCount = GetEmptyCellsCount();
             var possibleCellsIds = new Vector2Int[emptyCellsCount];
@@ -71,6 +75,11 @@ namespace PlayForge_Team.Snake.Runtime.Apples
         public void HideApple()
         {
             SetActiveApple(false);
+        }
+        
+        private void PlayAppleAnimation()
+        {
+            _appleAnimation.Play();
         }
         
         private void SetActiveApple(bool value)
