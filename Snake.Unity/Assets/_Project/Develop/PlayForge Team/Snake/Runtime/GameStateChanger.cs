@@ -12,9 +12,10 @@ namespace PlayForge_Team.Snake.Runtime
         [SerializeField] private GameObject gameEndScreen;
         [SerializeField] private TextMeshProUGUI gameEndScoreText;
         [SerializeField] private TextMeshProUGUI bestScoreText;
-        [SerializeField] private AppleSpawner appleSpawner;
+        [SerializeField] private AppleSpawner[] AppleSpawners;
         [SerializeField] private GameField gameField;
         [SerializeField] private Snakes.Snake snake;
+        private bool _isGameStarted;
 
         private void Start()
         {
@@ -23,23 +24,39 @@ namespace PlayForge_Team.Snake.Runtime
         
         public void RestartGame()
         {
+            _isGameStarted = true;
             snake.RestartGame();
-            appleSpawner.SetNextApple();
+
+            foreach (var t in AppleSpawners)
+            {
+                t.Restart();
+            }
             score.Restart();
             SwitchScreens(true);
         }
 
         public void EndGame()
         {
+            if (!_isGameStarted)
+            {
+                return;
+            }
+            _isGameStarted = false;
+
             snake.StopGame();
             RefreshScores();
             SwitchScreens(false);
         }
-        
+
         private void StartGame()
         {
+            _isGameStarted = true;
             snake.StartGame();
-            appleSpawner.CreateApple();
+            
+            foreach (var t in AppleSpawners)
+            {
+                t.CreateApple();
+            }
             SwitchScreens(true);
         }
 

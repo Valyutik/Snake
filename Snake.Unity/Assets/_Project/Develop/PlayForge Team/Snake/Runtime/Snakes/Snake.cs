@@ -7,6 +7,7 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
 {
     public sealed class Snake : MonoBehaviour
     {
+        [SerializeField] private AppleSpawner BonusAppleSpawner;
         [SerializeField] private Score score;
         [SerializeField] private AppleSpawner appleSpawner;
         [SerializeField] private GameStateChanger gameStateChanger;
@@ -80,26 +81,49 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
 
         private void CheckNextCellApple(Vector2Int nextCellId, Vector2Int cellIdForAddPart)
         {
-            if (appleSpawner.GetAppleCellId() != nextCellId) return;
-            AddPart(bodyPrefab, cellIdForAddPart);
-            appleSpawner.SetNextApple();
-            score.AddScore(1);
+            if(appleSpawner.GetAppleCellId() == nextCellId)
+            {
+                AddPart(bodyPrefab, cellIdForAddPart);
+                appleSpawner.SetNextApple();
+                BonusAppleSpawner.SetNextApple();
+
+                score.AddScore(1);
+            }
+            else if(BonusAppleSpawner.GetAppleCellId() == nextCellId)
+            {
+                const int countToRemove = 2;
+                for (var i = 0; i < countToRemove; i++)
+                {
+                    RemovePart();
+                }
+                BonusAppleSpawner.HideApple();
+            }
+        }
+        
+        private void RemovePart()
+        {
+            Destroy(_parts[^1].gameObject);
+            ChangePartsArrayLength(-1);
         }
         
         private void AddPart(GameFieldObject partPrefab, Vector2Int cellId)
         {
-            IncreasePartsArrayLength();
+            ChangePartsArrayLength(1);
             var newSnakePart = Instantiate(partPrefab);
             _parts[^1] = newSnakePart;
             gameField.SetObjectCell(newSnakePart, cellId);
         }
         
-        private void IncreasePartsArrayLength()
+        private void ChangePartsArrayLength(int count)
         {
             var tempParts = _parts;
-            _parts = new GameFieldObject[tempParts.Length + 1];
-            for (var i = 0; i < tempParts.Length; i++)
+            _parts = new GameFieldObject[tempParts.Length + count];
+            for (var i = 0; i < _parts.Length; i++)
             {
+                if (i >= tempParts.Length)
+                {
+                    break;
+                }
                 _parts[i] = tempParts[i];
             } 
         }
