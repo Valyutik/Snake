@@ -1,4 +1,5 @@
 ﻿using PlayForge_Team.Snake.Runtime.Apples;
+using PlayForge_Team.Snake.Runtime.UI;
 using UnityEngine;
 using System;
 
@@ -6,6 +7,7 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
 {
     public sealed class Snake : MonoBehaviour
     {
+        [SerializeField] private Score score;
         [SerializeField] private AppleSpawner appleSpawner;
         [SerializeField] private GameStateChanger gameStateChanger;
         [SerializeField] private GameField gameField;
@@ -28,6 +30,12 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
             MoveTimerTick();
         }
         
+        public void RestartGame()
+        {
+            DestroySnake();
+            StartGame();
+        }
+        
         public void StartGame()
         {
             CreateSnake();
@@ -42,6 +50,14 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
         public int GetSnakePartsLength()
         {
             return _parts.Length;
+        }
+        
+        private void DestroySnake()
+        {
+            foreach (var t in _parts)
+            {
+                Destroy(t.gameObject);
+            }
         }
 
         private void CreateSnake()
@@ -67,6 +83,7 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
             if (appleSpawner.GetAppleCellId() != nextCellId) return;
             AddPart(bodyPrefab, cellIdForAddPart);
             appleSpawner.SetNextApple();
+            score.AddScore(1);
         }
         
         private void AddPart(GameFieldObject partPrefab, Vector2Int cellId)

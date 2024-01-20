@@ -198,6 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 862108c06b6c4908acc567ba353feeb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Score: {fileID: 520308274}
   appleSpawner: {fileID: 316316822}
   gameStateChanger: {fileID: 495057519}
   gameField: {fileID: 1416447779}
@@ -506,6 +507,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40c20c4a898e4adb8058f29ce2ffc38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: {fileID: 520308274}
+  gameScreen: {fileID: 2009330604}
+  gameEndScreen: {fileID: 283057906}
+  gameEndScoreText: {fileID: 1688719383}
+  bestScoreText: {fileID: 725804303}
   appleSpawner: {fileID: 316316822}
   gameField: {fileID: 1416447779}
   snake: {fileID: 184658217}
@@ -610,6 +616,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 520308273}
+  - component: {fileID: 520308274}
   m_Layer: 0
   m_Name: Score
   m_TagString: Untagged
@@ -638,6 +645,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &520308274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520308272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dd82b24227a41e296a3eba92f91b7d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &725804301
 GameObject:
   m_ObjectHideFlags: 0
@@ -855,7 +874,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 856226839}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 495057519}
+        m_TargetAssemblyTypeName: PlayForge_Team.Snake.Runtime.GameStateChanger,
+          Snake.Runtime
+        m_MethodName: RestartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &856226839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1127,7 +1159,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!1 &1416447776
 GameObject:
