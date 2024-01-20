@@ -4,6 +4,8 @@ namespace PlayForge_Team.Snake.Runtime
 {
     public class GameField : MonoBehaviour
     {
+        public int CellsInRow => cellsInRow;
+        
         [SerializeField] private Transform firstCellPoint;
         [SerializeField] private Vector2 cellSize;
         [SerializeField] private int cellsInRow = 12;
