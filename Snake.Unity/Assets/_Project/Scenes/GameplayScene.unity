@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 862108c06b6c4908acc567ba353feeb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplosionForce: 60
+  explosionForce: 60
   bonusAppleSpawner: {fileID: 1969811234}
   score: {fileID: 520308274}
   appleSpawner: {fileID: 316316822}
@@ -516,7 +516,7 @@ MonoBehaviour:
   gameEndScreen: {fileID: 283057906}
   gameEndScoreText: {fileID: 1688719383}
   bestScoreText: {fileID: 725804303}
-  AppleSpawners:
+  appleSpawners:
   - {fileID: 316316822}
   - {fileID: 1969811234}
   gameField: {fileID: 1416447779}

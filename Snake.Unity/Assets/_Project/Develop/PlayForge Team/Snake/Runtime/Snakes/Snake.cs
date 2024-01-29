@@ -40,6 +40,7 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
         
         public void StartGame()
         {
+            _moveDirection = Vector2Int.up;
             CreateSnake();
             _isActive = true;
         }
