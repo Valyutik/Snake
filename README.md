@@ -5,4 +5,4 @@ Snake game, made as part of the course "Future Code | C# in Unity: from zero to 
 
 ## Gameplay
 
-https://github.com/Valyutik/Snake/assets/65827251/220bd573-f337-400c-9f60-e57f74966ddb
+https://github.com/Valyutik/Snake/assets/65827251/223a0fea-b783-4950-95ba-eafccc48f8a3
