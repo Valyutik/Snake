@@ -7,7 +7,7 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
 {
     public sealed class Snake : MonoBehaviour
     {
-        [SerializeField] private float ExplosionForce = 60;
+        [SerializeField] private float explosionForce = 60;
         [SerializeField] private AppleSpawner bonusAppleSpawner;
         [SerializeField] private Score score;
         [SerializeField] private AppleSpawner appleSpawner;
@@ -70,7 +70,7 @@ namespace PlayForge_Team.Snake.Runtime.Snakes
                 partRigid.simulated = true;
                 var partPosition = gameField.GetCellPosition(t.GetCellId());
                 var explodeDirection = partPosition - explodePosition;
-                partRigid.AddForce((explodeDirection.normalized + Vector2.up) * ExplosionForce, ForceMode2D.Impulse);
+                partRigid.AddForce((explodeDirection.normalized + Vector2.up) * explosionForce, ForceMode2D.Impulse);
             }
         }
 

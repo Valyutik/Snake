@@ -12,7 +12,7 @@ namespace PlayForge_Team.Snake.Runtime
         [SerializeField] private GameObject gameEndScreen;
         [SerializeField] private TextMeshProUGUI gameEndScoreText;
         [SerializeField] private TextMeshProUGUI bestScoreText;
-        [SerializeField] private AppleSpawner[] AppleSpawners;
+        [SerializeField] private AppleSpawner[] appleSpawners;
         [SerializeField] private GameField gameField;
         [SerializeField] private Snakes.Snake snake;
         private bool _isGameStarted;
@@ -27,7 +27,7 @@ namespace PlayForge_Team.Snake.Runtime
             _isGameStarted = true;
             snake.RestartGame();
 
-            foreach (var t in AppleSpawners)
+            foreach (var t in appleSpawners)
             {
                 t.Restart();
             }
@@ -53,7 +53,7 @@ namespace PlayForge_Team.Snake.Runtime
             _isGameStarted = true;
             snake.StartGame();
             
-            foreach (var t in AppleSpawners)
+            foreach (var t in appleSpawners)
             {
                 t.CreateApple();
             }
@@ -74,25 +74,25 @@ namespace PlayForge_Team.Snake.Runtime
 
         private void RefreshScores()
         {
-            var score = this.score.GetScore();
-            var oldBestScore = this.score.GetBestScore();
-            var isNewBestScore = CheckNewBestScore(score, oldBestScore);
+            var value = score.GetScore();
+            var oldBestScore = score.GetBestScore();
+            var isNewBestScore = CheckNewBestScore(value, oldBestScore);
             SetActiveGameEndScoreText(!isNewBestScore);
             if (isNewBestScore)
             {
-                this.score.SetBestScore(score);
-                SetNewBestScoreText(score);
+                score.SetBestScore(value);
+                SetNewBestScoreText(value);
             }
             else
             {
-                SetGameEndScoreText(score);
+                SetGameEndScoreText(value);
                 SetOldBestScoreText(oldBestScore);
             }
         }
         
-        private bool CheckNewBestScore(int score, int oldBestScore)
+        private bool CheckNewBestScore(int value, int oldBestScore)
         {
-            return score > oldBestScore;
+            return value > oldBestScore;
         }
 
         private void SetGameEndScoreText(int value)
